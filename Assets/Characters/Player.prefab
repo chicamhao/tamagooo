@@ -218,7 +218,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 764c4f00de604047a743eefd595ea5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _groundDistance: 1
   _jumpForce: 9
 --- !u!114 &2580109898856021044
 MonoBehaviour:
@@ -232,7 +231,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b90f1e5a18843b0a92d0b0afb6838c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerCamera: {fileID: 8303093099919959869}
   RotationSpeed: 200
   MaxSpeedOnGround: 13
   MovementSharpnessOnGround: 15
@@ -351,8 +349,7 @@ MonoBehaviour:
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
-  m_Cameras:
-  - {fileID: 0}
+  m_Cameras: []
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
