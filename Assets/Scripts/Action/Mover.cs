@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Core
+namespace Action
 {
     public sealed class Mover : MonoBehaviour
     {
         [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private Animator _animator;
         
-        static readonly int s_forwarSpeedAnimation = Animator.StringToHash("_forwardSpeed");
+        static readonly int s_forwardSpeedAnimation = Animator.StringToHash("_forwardSpeed");
         
         private void Update()
         {
@@ -32,7 +32,7 @@ namespace Core
             var velocity = transform.InverseTransformDirection(_navMeshAgent.velocity);
             
             // forward direction.
-            _animator.SetFloat(s_forwarSpeedAnimation, Mathf.Abs(velocity.z));
+            _animator.SetFloat(s_forwardSpeedAnimation, Mathf.Abs(velocity.z));
         }
     }
 }

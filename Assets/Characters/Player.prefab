@@ -12,7 +12,10 @@ GameObject:
   - component: {fileID: 3122855503829242450}
   - component: {fileID: 443692632778551047}
   - component: {fileID: 2553162380094043764}
-  - component: {fileID: 795253778080532584}
+  - component: {fileID: 8921976537203212307}
+  - component: {fileID: 6563357366912924309}
+  - component: {fileID: 3492561479359883041}
+  - component: {fileID: 2580109898856021044}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -174,7 +177,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &795253778080532584
+--- !u!114 &8921976537203212307
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,27 +186,61 @@ MonoBehaviour:
   m_GameObject: {fileID: 7253983127304857660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d562249815e74071a1e0003ac8720945, type: 3}
+  m_Script: {fileID: 11500000, guid: d56763c6050847ccab27418aa63ede58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6563357366912924309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7253983127304857660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 255e0b62441a4c54aa5b3bc8fe046331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerCamera: {fileID: 8303093099919959869}
-  GravityDownForce: 12
-  GroundCheckLayers:
-    serializedVersion: 2
-    m_Bits: 1
-  GroundCheckDistance: 1
+  CameraHeightRatio: 0.9
+  CrouchingSharpness: 10
+  CapsuleHeightStanding: 1.8
+  CapsuleHeightCrouching: 0.9
+--- !u!114 &3492561479359883041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7253983127304857660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 764c4f00de604047a743eefd595ea5e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundDistance: 1
+  _jumpForce: 9
+--- !u!114 &2580109898856021044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7253983127304857660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b90f1e5a18843b0a92d0b0afb6838c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerCamera: {fileID: 8303093099919959869}
+  RotationSpeed: 200
   MaxSpeedOnGround: 13
   MovementSharpnessOnGround: 15
   MaxSpeedCrouchedRatio: 0.5
   MaxSpeedInAir: 10
   AccelerationSpeedInAir: 25
   SprintSpeedModifier: 1.5
-  RotationSpeed: 200
-  JumpForce: 9
-  CameraHeightRatio: 0.9
-  CapsuleHeightStanding: 1.8
-  CapsuleHeightCrouching: 0.9
-  CrouchingSharpness: 10
+  GravityDownForce: 12
 --- !u!1 &7442781921941657531
 GameObject:
   m_ObjectHideFlags: 0

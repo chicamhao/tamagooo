@@ -61,11 +61,6 @@ namespace Input
             _fireInputWasHeld = GetFireInputHeld();
         }
 
-        public bool CanProcessInput()
-        {
-            return Cursor.lockState == CursorLockMode.Locked; //&& !m_GameFlowManager.GameIsEnding;
-        }
-
         public Vector3 GetMoveInput()
         {
             if (!CanProcessInput()) return Vector3.zero;
@@ -141,32 +136,17 @@ namespace Input
 
         public bool GetSprintInputHeld()
         {
-            if (CanProcessInput())
-            {
-                return m_SprintAction.IsPressed();
-            }
-
-            return false;
+            return CanProcessInput() && m_SprintAction.IsPressed();
         }
 
         public bool GetCrouchInputDown()
         {
-            if (CanProcessInput())
-            {
-                return m_CrouchAction.WasPressedThisFrame();
-            }
-
-            return false;
+            return CanProcessInput() && m_CrouchAction.WasPressedThisFrame();
         }
 
         public bool GetCrouchInputReleased()
         {
-            if (CanProcessInput())
-            {
-                return m_CrouchAction.WasReleasedThisFrame();
-            }
-
-            return false;
+            return CanProcessInput() && m_CrouchAction.WasReleasedThisFrame();
         }
 
         public bool GetReloadButtonDown()
@@ -211,6 +191,11 @@ namespace Input
                 return 9;
 
             return 0;
+        }
+        
+        private static bool CanProcessInput()
+        {
+            return Cursor.lockState == CursorLockMode.Locked; //&& !m_GameFlowManager.GameIsEnding;
         }
     }
 }
