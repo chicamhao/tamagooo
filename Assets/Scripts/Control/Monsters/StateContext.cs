@@ -3,7 +3,7 @@ namespace Control.Monsters
     public sealed class StateContext
     {
         private IState _currentState;
-        
+
         public void ChangeState(IState newState)
         {
             _currentState?.Exit();
@@ -16,4 +16,4 @@ namespace Control.Monsters
             _currentState?.Update();
         }
     }
-}
+} 

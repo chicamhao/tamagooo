@@ -9,6 +9,7 @@ namespace Input
         private CrouchAction _crouchAction;
         private JumpAction _jumpAction;
         private MoveAction _moveAction;
+        private FireAction _fireAction;
 
         private void Start()
         {
@@ -16,6 +17,7 @@ namespace Input
             _crouchAction = GetComponent<CrouchAction>();
             _jumpAction = GetComponent<JumpAction>();
             _moveAction = GetComponent<MoveAction>();
+            _fireAction = GetComponent<FireAction>();
         }
  
         private void Update()
@@ -26,6 +28,7 @@ namespace Input
             _moveAction.Rotate();
             _moveAction.Move(_crouchAction, _groundHandle);
             _jumpAction.Jump(_groundHandle);
+            _fireAction.Fire();
         }
     }
 }
