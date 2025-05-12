@@ -7,7 +7,6 @@ namespace Action
     public sealed class FireAction : MonoBehaviour
     {
         [SerializeField] private GameObject _lightObject;
-        
         private InputHandle _inputHandle;
 
         private void Start()

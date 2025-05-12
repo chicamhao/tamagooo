@@ -25,7 +25,9 @@ namespace Input
             _groundHandle.Validate(Time.time);
 
             _crouchAction.Crouch();
+            
             _moveAction.Rotate();
+            
             _moveAction.Move(_crouchAction, _groundHandle);
             _jumpAction.Jump(_groundHandle);
             _fireAction.Fire();
