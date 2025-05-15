@@ -1,31 +1,43 @@
+using Input;
 using UnityEngine;
 
 namespace Action
 {
-    public sealed class GroundHandle
+    public sealed class ActionContext
     {
         static readonly float _groundDistance = 1f;
-        static readonly float s_groundDistanceInAir = 0.07f; 
-        static readonly float s_jumpGroundingPreventionTime = 0.2f;
-        
+        static readonly float _groundDistanceInAir = 0.07f; 
+        static readonly float _jumpGroundingPreventionTime = 0.2f;
+
+        // height of character when standing.
+        public static float CapsuleHeightStanding = 1.8f;
+
+        // height of character when crouching.
+        public static float CapsuleHeightCrouching = 0.9f;
+
         public bool IsGrounded { get; set; }
-        public bool HasJumpedThisFrame { get; set; }
+        public bool IsCrouching { get; set; }
         public float LastTimeJumped { get; set; }
         public Vector3 GroundNormal { get; set; }
         public Vector3 Velocity { get; set; }
 
+        public CharacterController Controller => _controller;
         private readonly CharacterController _controller;
-        
-        public GroundHandle(CharacterController controller)
+
+        public InputHandle Input => _input;
+        private readonly InputHandle _input;
+
+        public ActionContext(CharacterController controller, InputHandle input)
         {
             _controller = controller;
+            _input = input;
         }        
         
         public void Validate(float time)
         {
             // only detect ground if it's been a short amount of time since last jump.
             // otherwise may snap to the ground instantly after trying to jump 
-            if (!(time >= LastTimeJumped + s_jumpGroundingPreventionTime))
+            if (!(time >= LastTimeJumped + _jumpGroundingPreventionTime))
             {
                 return;
             };
@@ -33,7 +45,7 @@ namespace Action
             // make sure that the ground check distance while already in air is very small,
             // to prevent suddenly snapping to ground.
             var chosenGroundCheckDistance =
-                IsGrounded ? (_controller.skinWidth + _groundDistance) : s_groundDistanceInAir;
+                IsGrounded ? (_controller.skinWidth + _groundDistance) : _groundDistanceInAir;
 
             IsGrounded = false;
             GroundNormal = Vector3.up;

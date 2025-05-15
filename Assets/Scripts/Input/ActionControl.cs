@@ -5,32 +5,35 @@ namespace Input
 {
     public sealed class ActionControl : MonoBehaviour
     {
-        private GroundHandle _groundHandle;
+        [SerializeField] ActionSettings _settings;
+        [SerializeField] GameObject _lightObject;
+        private ActionContext _context;
+
         private CrouchAction _crouchAction;
         private JumpAction _jumpAction;
         private MoveAction _moveAction;
-        private FireAction _fireAction;
+        private UseAction _useAction;
 
         private void Start()
         {
-            _groundHandle = new GroundHandle(GetComponent<CharacterController>());
-            _crouchAction = GetComponent<CrouchAction>();
-            _jumpAction = GetComponent<JumpAction>();
-            _moveAction = GetComponent<MoveAction>();
-            _fireAction = GetComponent<FireAction>();
+            _context = new ActionContext(GetComponent<CharacterController>(), GetComponent<InputHandle>());
+            _crouchAction = new CrouchAction(_context, _settings.Crouch);
+
+            _jumpAction = new JumpAction(_context, _settings.Jump);
+            _moveAction = new MoveAction(_context, _settings.Move, _settings.Jump, _settings.Crouch);
+            _useAction = new UseAction(_context, _lightObject);
         }
  
         private void Update()
         {
-            _groundHandle.Validate(Time.time);
+            _context.Validate(Time.time);
 
-            _crouchAction.Crouch();
-            
-            _moveAction.Rotate();
-            
-            _moveAction.Move(_crouchAction, _groundHandle);
-            _jumpAction.Jump(_groundHandle);
-            _fireAction.Fire();
+            _crouchAction.Crouch();           
+            _moveAction.Rotate();       
+            _moveAction.Move();
+            _jumpAction.Jump();
+
+            _useAction.Use();
         }
     }
 }
