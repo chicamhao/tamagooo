@@ -1,104 +1,63 @@
-using System;
-using Input;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace Action
 {
-    public sealed class CrouchAction : MonoBehaviour
+    public sealed class CrouchAction
     {
-        [Header("References")] [Tooltip("Reference to the main camera used for the player")]
-        public Camera PlayerCamera;
+        readonly ActionContext _context;
+        readonly CrouchSettings _settings;
 
-        [Header("Stance")] [Tooltip("Ratio (0-1) of the character height where the camera will be at")]
-        public float CameraHeightRatio = 0.9f;
-
-        [Tooltip("Speed of crouching transitions")]
-        public float CrouchingSharpness = 10f;
-        
-        [Tooltip("Height of character when standing")]
-        public float CapsuleHeightStanding = 1.8f;
-        
-        [Tooltip("Height of character when crouching")]
-        public float CapsuleHeightCrouching = 0.9f;
-        
-        float _targetCharacterHeight;
-        public bool IsCrouching { get; private set; }
-        CharacterController _controller;
-        InputHandle _inputHandle;
-        private void Start()
+        public CrouchAction(ActionContext context, CrouchSettings settings)
         {
-            _controller = GetComponent<CharacterController>();
-            _inputHandle = GetComponent<InputHandle>();
-            
-            TryCrouch(false, true);
+            _context = context;
+            _settings = settings;
             ForceUpdateHeight();
         }
 
         public void Crouch()
         {
-            if (_inputHandle.GetCrouchInputDown())
+            if (_context.Input.GetCrouchInputDown())
             {
-                TryCrouch(!IsCrouching, false);
+                // TODO clean up judgement here.
+                if (_context.IsCrouching)
+                {
+                    bool crouchable = Calculator.Standable(_context, _settings.CapsuleHeightStanding);
+                    if (crouchable)
+                    {
+                        _context.IsCrouching = !_context.IsCrouching;
+                    }
+                }
+                else
+                {
+                    _context.IsCrouching = !_context.IsCrouching;
+                }
             }
             UpdateHeight();
         }
 
-        // returns false if there was an obstruction
-        public bool TryCrouch(bool crouched, bool ignoreObstructions)
-        {
-            // set appropriate heights
-            if (crouched)
-            {
-                _targetCharacterHeight = CapsuleHeightCrouching;
-            }
-            else
-            {
-                // detect obstructions
-                if (!ignoreObstructions)
-                {
-                    var standingOverlaps = Physics.OverlapCapsule(
-                        Calculator.GetCapsuleBottomHemisphere(_controller),
-                        Calculator.GetCapsuleTopHemisphere(_controller, CapsuleHeightStanding),
-                        _controller.radius,
-                        -1,
-                        QueryTriggerInteraction.Ignore);
-                    
-                    foreach (Collider c in standingOverlaps)
-                    {
-                        if (c != _controller)
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                _targetCharacterHeight = CapsuleHeightStanding;
-            }
-            
-            IsCrouching = crouched;
-            return true;
-        }
-        
         private void UpdateHeight()
         {
-            if (Mathf.Approximately(_controller.height, _targetCharacterHeight)) return;
+            var height = _context.IsCrouching
+                ? _settings.CapsuleHeightCrouching
+                : _settings.CapsuleHeightStanding;
+
+            if (Mathf.Approximately(_context.Controller.height, height)) return;
             
             // resize the capsule and adjust camera position
-            _controller.height = Mathf.Lerp(
-                _controller.height, _targetCharacterHeight, CrouchingSharpness * Time.deltaTime);
+            _context.Controller.height = Mathf.Lerp(
+                _context.Controller.height, height, _settings.CrouchingSharpness * Time.deltaTime);
            
-            _controller.center = Vector3.up * (_controller.height * 0.5f);
+            _context.Controller.center = Vector3.up * (_context.Controller.height * 0.5f);
             
-            PlayerCamera.transform.localPosition = Vector3.Lerp(PlayerCamera.transform.localPosition,
-                Vector3.up * (_targetCharacterHeight * CameraHeightRatio), CrouchingSharpness * Time.deltaTime);
+            Camera.main.transform.localPosition = Vector3.Lerp(Camera.main.transform.localPosition,
+                Vector3.up * (height * _settings.CameraHeightRatio), _settings.CrouchingSharpness * Time.deltaTime);
         }
         
-        public void ForceUpdateHeight()
+        private void ForceUpdateHeight()
         {
-            _controller.height = _targetCharacterHeight;
-            _controller.center = Vector3.up * (_controller.height * 0.5f);
-            PlayerCamera.transform.localPosition = Vector3.up * (_targetCharacterHeight * CameraHeightRatio);
+            _context.Controller.height = _settings.CapsuleHeightStanding;
+            _context.Controller.center = Vector3.up * (_context.Controller.height * 0.5f);
+            Camera.main.transform.localPosition = Vector3.up * (_context.Controller.height * _settings.CameraHeightRatio);
         }
     }
 }

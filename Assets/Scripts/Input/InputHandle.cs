@@ -20,13 +20,16 @@ namespace Input
         //GameFlowManager m_GameFlowManager;
         private bool _fireInputWasHeld;
 
-        private InputAction m_MoveAction;
-        private InputAction m_LookAction;
-        private InputAction m_JumpAction;
+        private InputAction _moveAction;
+        private InputAction _lookAction;
+        private InputAction _jumpAction;
+        private InputAction _sprintAction;
+        private InputAction _crouchAction;
+        private InputAction _useAction;
+
+
         private InputAction m_FireAction;
         private InputAction m_AimAction;
-        private InputAction m_SprintAction;
-        private InputAction m_CrouchAction;
         private InputAction m_ReloadAction;
         private InputAction m_NextWeaponAction;
 
@@ -35,25 +38,30 @@ namespace Input
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            m_MoveAction = InputSystem.actions.FindAction("Player/Move");
-            m_LookAction = InputSystem.actions.FindAction("Player/Look");
-            m_JumpAction = InputSystem.actions.FindAction("Player/Jump");
+            _moveAction = InputSystem.actions.FindAction("Player/Move");
+            _lookAction = InputSystem.actions.FindAction("Player/Look");
+            _jumpAction = InputSystem.actions.FindAction("Player/Jump");
+
+            _sprintAction = InputSystem.actions.FindAction("Player/Sprint");
+            _crouchAction = InputSystem.actions.FindAction("Player/Crouch");
+            _useAction = InputSystem.actions.FindAction("Player/Use");
+
             m_FireAction = InputSystem.actions.FindAction("Player/Fire");
             m_AimAction = InputSystem.actions.FindAction("Player/Aim");
-            m_SprintAction = InputSystem.actions.FindAction("Player/Sprint");
-            m_CrouchAction = InputSystem.actions.FindAction("Player/Crouch");
             m_ReloadAction = InputSystem.actions.FindAction("Player/Reload");
             m_NextWeaponAction = InputSystem.actions.FindAction("Player/NextWeapon");
             
-            m_MoveAction.Enable();
-            m_LookAction.Enable();
-            m_JumpAction.Enable();
-            m_FireAction.Enable();
-            m_AimAction.Enable();
-            m_SprintAction.Enable();
-            m_CrouchAction.Enable();
-            m_ReloadAction.Enable();
-            m_NextWeaponAction.Enable();
+            _moveAction.Enable();
+            _lookAction.Enable();
+            _jumpAction.Enable();
+            _sprintAction.Enable();
+            _crouchAction.Enable();
+            _useAction.Enable();
+
+            m_FireAction.Disable();
+            m_AimAction.Disable();
+            m_ReloadAction.Disable();
+            m_NextWeaponAction.Disable();
         }
 
         private void LateUpdate()
@@ -65,7 +73,7 @@ namespace Input
         {
             if (!CanProcessInput()) return Vector3.zero;
             
-            var input = m_MoveAction.ReadValue<Vector2>();
+            var input = _moveAction.ReadValue<Vector2>();
             var move = new Vector3(input.x, 0f, input.y);
 
             // constrain move input to a maximum magnitude of 1, otherwise diagonal movement might exceed the max move speed defined
@@ -80,7 +88,7 @@ namespace Input
             if (!CanProcessInput())
                 return 0.0f;
             
-            var input = m_LookAction.ReadValue<Vector2>().x;
+            var input = _lookAction.ReadValue<Vector2>().x;
 
             if (InvertXAxis)
                 input *= -1;
@@ -94,7 +102,7 @@ namespace Input
             if (!CanProcessInput())
                 return 0.0f;
             
-            var input = m_LookAction.ReadValue<Vector2>().y;
+            var input = _lookAction.ReadValue<Vector2>().y;
 
             if (InvertYAxis)
                 input *= -1;
@@ -106,12 +114,12 @@ namespace Input
 
         public bool GetJumpInputDown()
         {
-            return CanProcessInput() && m_JumpAction.WasPressedThisFrame();
+            return CanProcessInput() && _jumpAction.WasPressedThisFrame();
         }
 
         public bool GetJumpInputHeld()
         {
-            return CanProcessInput() && m_JumpAction.IsPressed();
+            return CanProcessInput() && _jumpAction.IsPressed();
         }
 
         public bool GetFireInputDown()
@@ -136,22 +144,27 @@ namespace Input
 
         public bool GetSprintInputHeld()
         {
-            return CanProcessInput() && m_SprintAction.IsPressed();
+            return CanProcessInput() && _sprintAction.IsPressed();
         }
 
         public bool GetCrouchInputDown()
         {
-            return CanProcessInput() && m_CrouchAction.WasPressedThisFrame();
+            return CanProcessInput() && _crouchAction.WasPressedThisFrame();
         }
 
         public bool GetCrouchInputReleased()
         {
-            return CanProcessInput() && m_CrouchAction.WasReleasedThisFrame();
+            return CanProcessInput() && _crouchAction.WasReleasedThisFrame();
         }
 
         public bool GetReloadButtonDown()
         {
             return CanProcessInput() && m_ReloadAction.WasPressedThisFrame();
+        }
+
+        public bool GetUseInputDown()
+        {
+            return CanProcessInput() && _useAction.WasPressedThisFrame();
         }
 
         public int GetSwitchWeaponInput()

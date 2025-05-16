@@ -4,6 +4,11 @@ namespace Control.Monsters
     {
         private IState _currentState;
 
+        public void Start(IState state)
+        {
+            _currentState = state;
+        }
+
         public void ChangeState(IState newState)
         {
             _currentState?.Exit();
@@ -11,7 +16,7 @@ namespace Control.Monsters
             _currentState.Enter(this);
         }
 
-        private void Update()
+        public void Update()
         {
             _currentState?.Update();
         }
