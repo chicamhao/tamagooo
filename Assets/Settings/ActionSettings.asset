@@ -12,6 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 453b5cef9df49404ca7e95022ee3f847, type: 3}
   m_Name: ActionSettings
   m_EditorClassIdentifier: 
+  Move:
+    RotationSpeed: 150
+    MaxSpeedOnGround: 13
+    MovementSharpnessOnGround: 15
+    SprintSpeedModifier: 1.5
+  Jump:
+    JumpForce: 9
+    MaxSpeedInAir: 25
+    AccelerationSpeedInAir: 25
+    GravityDownForce: 12
+    CapsuleHeightStanding: 1.8
   Crouch:
     CameraHeightRatio: 0.9
     CrouchingSharpness: 10

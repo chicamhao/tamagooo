@@ -16,15 +16,26 @@ namespace Action
 
         public void Crouch()
         {
-            if (!_context.Input.GetCrouchInputDown())
+            if (_context.Input.GetCrouchInputDown())
             {
-                if (_context.IsCrouching && !Calculator.Standable(_context)) return;
-                _context.IsCrouching = !_context.IsCrouching;
+                // TODO clean up judgement here.
+                if (_context.IsCrouching)
+                {
+                    bool crouchable = Calculator.Standable(_context, _settings.CapsuleHeightStanding);
+                    if (crouchable)
+                    {
+                        _context.IsCrouching = !_context.IsCrouching;
+                    }
+                }
+                else
+                {
+                    _context.IsCrouching = !_context.IsCrouching;
+                }
             }
-            UpdateHeight(_context);
+            UpdateHeight();
         }
 
-        private void UpdateHeight(ActionContext _context)
+        private void UpdateHeight()
         {
             var height = _context.IsCrouching
                 ? _settings.CapsuleHeightCrouching

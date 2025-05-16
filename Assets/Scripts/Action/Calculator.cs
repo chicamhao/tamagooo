@@ -31,7 +31,7 @@ namespace Action
         }
 
         // returns false if there was an obstruction.
-        public static bool Standable(ActionContext context)
+        public static bool Standable(ActionContext context, float height)
         {
             _colliders[0] = null;
             _colliders[1] = null;
@@ -40,9 +40,8 @@ namespace Action
             // detect obstructions
             Physics.OverlapCapsuleNonAlloc(
                 GetCapsuleBottomHemisphere(context.Controller),
-                GetCapsuleTopHemisphere(context.Controller, ActionContext.CapsuleHeightStanding),
-                context.Controller.radius,
-                _colliders);
+                GetCapsuleTopHemisphere(context.Controller, height),
+                context.Controller.radius, _colliders);
 
             foreach (Collider c in _colliders)
             {

@@ -58,6 +58,8 @@ namespace Action
             var capsuleBottomBeforeMove = Calculator.GetCapsuleBottomHemisphere(_context.Controller);
             var capsuleTopBeforeMove = Calculator.GetCapsuleTopHemisphere(_context.Controller);
 
+            _context.Controller.Move(velocity * Time.deltaTime);
+
             // detect obstructions to adjust velocity accordingly.
             if (Physics.CapsuleCast(capsuleBottomBeforeMove, capsuleTopBeforeMove, _context.Controller.radius,
                 velocity.normalized, out var hit, velocity.magnitude * Time.deltaTime))
@@ -65,7 +67,6 @@ namespace Action
                 velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
             }
 
-            _context.Controller.Move(velocity * Time.deltaTime);
             _context.Velocity = velocity;
         }
         

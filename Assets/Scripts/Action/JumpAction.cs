@@ -20,7 +20,7 @@ namespace Action
             
             if (!_context.Input.GetJumpInputDown()) return;
             
-            if (!Calculator.Standable(_context)) return;
+            if (!Calculator.Standable(_context, _settings.CapsuleHeightStanding)) return;
 
             var velocity = _context.Velocity;
 

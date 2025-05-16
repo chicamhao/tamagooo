@@ -41,6 +41,9 @@ namespace Action
 
         [Tooltip("Force applied downward when in the air")]
         public float GravityDownForce = 12f;
+
+        [Tooltip("Height of character when crouching")]
+        public float CapsuleHeightStanding = 1.8f;
     }
 
     [Serializable]
