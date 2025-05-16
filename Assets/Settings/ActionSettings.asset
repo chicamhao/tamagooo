@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: ActionSettings
   m_EditorClassIdentifier: 
   Move:
-    RotationSpeed: 150
-    MaxSpeedOnGround: 13
-    MovementSharpnessOnGround: 15
+    RotationSpeed: 100
+    MaxSpeedOnGround: 10
+    MovementSharpnessOnGround: 10
     SprintSpeedModifier: 1.5
   Jump:
-    JumpForce: 9
+    JumpForce: 7
     MaxSpeedInAir: 25
-    AccelerationSpeedInAir: 25
-    GravityDownForce: 12
+    AccelerationSpeedInAir: 1
+    GravityDownForce: 15
     CapsuleHeightStanding: 1.8
   Crouch:
     CameraHeightRatio: 0.9
     CrouchingSharpness: 10
     CapsuleHeightStanding: 1.8
-    CapsuleHeightCrouching: 0.9
-    MaxSpeedCrouchedRatio: 0.5
+    CapsuleHeightCrouching: 0.8
+    MaxSpeedCrouchedRatio: 0.25
