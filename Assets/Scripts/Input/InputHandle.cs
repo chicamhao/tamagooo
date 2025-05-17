@@ -26,7 +26,7 @@ namespace Input
         private InputAction _sprintAction;
         private InputAction _crouchAction;
         private InputAction _useAction;
-
+        private InputAction _interactAction;
 
         private InputAction m_FireAction;
         private InputAction m_AimAction;
@@ -38,19 +38,19 @@ namespace Input
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            _moveAction = InputSystem.actions.FindAction("Player/Move");
-            _lookAction = InputSystem.actions.FindAction("Player/Look");
-            _jumpAction = InputSystem.actions.FindAction("Player/Jump");
-
-            _sprintAction = InputSystem.actions.FindAction("Player/Sprint");
-            _crouchAction = InputSystem.actions.FindAction("Player/Crouch");
-            _useAction = InputSystem.actions.FindAction("Player/Use");
+            BindAction(ref _moveAction, "Move");
+            BindAction(ref _lookAction, "Look");
+            BindAction(ref _jumpAction, "Jump");
+            BindAction(ref _sprintAction, "Sprint");
+            BindAction(ref _crouchAction, "Crouch");
+            BindAction(ref _useAction, "Use");
+            BindAction(ref _interactAction, "Interact");
 
             m_FireAction = InputSystem.actions.FindAction("Player/Fire");
             m_AimAction = InputSystem.actions.FindAction("Player/Aim");
             m_ReloadAction = InputSystem.actions.FindAction("Player/Reload");
             m_NextWeaponAction = InputSystem.actions.FindAction("Player/NextWeapon");
-            
+
             _moveAction.Enable();
             _lookAction.Enable();
             _jumpAction.Enable();
@@ -62,6 +62,11 @@ namespace Input
             m_AimAction.Disable();
             m_ReloadAction.Disable();
             m_NextWeaponAction.Disable();
+        }
+
+        void BindAction(ref InputAction action, string name)
+        {
+            action = InputSystem.actions.FindAction("Player/" + name);
         }
 
         private void LateUpdate()
@@ -156,6 +161,11 @@ namespace Input
         {
             return CanProcessInput() && _crouchAction.WasReleasedThisFrame();
         }
+
+        public bool GetInteractInputDown()
+        {
+            return CanProcessInput() && _interactAction.WasPressedThisFrame();
+        } 
 
         public bool GetReloadButtonDown()
         {
