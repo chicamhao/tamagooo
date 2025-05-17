@@ -1,3 +1,4 @@
+using Entity;
 using Input;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ namespace Action
         public float LastTimeJumped { get; set; }
         public Vector3 GroundNormal { get; set; }
         public Vector3 Velocity { get; set; }
+
+        public Interactable InteractObject { get; set; }
 
         public CharacterController Controller => _controller;
         private readonly CharacterController _controller;
