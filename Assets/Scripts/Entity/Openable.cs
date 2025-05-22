@@ -26,7 +26,7 @@ namespace Entity
                 obj.Object.transform.rotation = Quaternion.Slerp(obj.Object.transform.rotation, rotation, Time.deltaTime * _speed);
 
                 var position = IsOpened ? obj.OpenPosition : obj.ClosePosition;
-                obj.Object.transform.position = Vector3.Lerp(obj.Object.transform.position, position, Time.deltaTime * _speed);
+                obj.Object.transform.position = Vector3.MoveTowards(obj.Object.transform.position, position, Time.deltaTime * _speed);
             }
         }     
 

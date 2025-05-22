@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1262812880092214057}
+  - component: {fileID: 6100767015771600411}
+  - component: {fileID: 4769458626172283644}
   m_Layer: 0
   m_Name: (Prb)Door
   m_TagString: Untagged
@@ -32,6 +34,45 @@ Transform:
   - {fileID: 3653520410446838222}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6100767015771600411
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931403444797532563}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.54, y: 3.59, z: 3.17}
+  m_Center: {x: 0, y: 1.63, z: -0.85}
+--- !u!114 &4769458626172283644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931403444797532563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d2834aae2cf744de869e2339d5b48e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pivotObjects:
+  - Object: {fileID: 4996156951021753390}
+    ToRotate: {x: 0, y: -90, z: 0}
+    ToPosition: {x: 0, y: 0, z: 0}
+  _speed: 1
+  IsOpened: 0
 --- !u!1 &3129157780053066913
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,8 +201,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 556670833738519048}
-  - component: {fileID: 1814353966925573307}
-  - component: {fileID: 4880383404044131176}
   m_Layer: 0
   m_Name: door_pivot
   m_TagString: Untagged
@@ -185,44 +224,6 @@ Transform:
   - {fileID: 5966544372300029393}
   m_Father: {fileID: 3653520410446838222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1814353966925573307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4996156951021753390}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d2834aae2cf744de869e2339d5b48e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _pivotObjects:
-  - Object: {fileID: 4996156951021753390}
-    ToRotate: {x: 0, y: 90, z: 0}
-  _speed: 2
-  IsOpened: 0
---- !u!65 &4880383404044131176
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4996156951021753390}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.5, y: 3.06, z: 2.25}
-  m_Center: {x: 0, y: 0, z: -0.85}
 --- !u!1 &9204406534765539743
 GameObject:
   m_ObjectHideFlags: 0
