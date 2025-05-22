@@ -67,11 +67,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d2834aae2cf744de869e2339d5b48e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 0
+  _ignoreColliderWhenOpening: 0
   _pivotObjects:
   - Object: {fileID: 4996156951021753390}
+    Collider: {fileID: 0}
     ToRotate: {x: 0, y: -90, z: 0}
     ToPosition: {x: 0, y: 0, z: 0}
-  _speed: 1
+  _speed: 4
   IsOpened: 0
 --- !u!1 &3129157780053066913
 GameObject:

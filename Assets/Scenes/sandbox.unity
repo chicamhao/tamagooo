@@ -854,10 +854,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: (Prb)Door
       objectReference: {fileID: 0}
-    - target: {fileID: 4769458626172283644, guid: 0afd69b5b86b13b4db61d58f91c02066, type: 3}
-      propertyPath: _speed
-      value: 4
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1427,10 +1423,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 543264821824106684, guid: d2abb3f7c9ac59048a122c38a8480e71, type: 3}
-      propertyPath: _speed
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 3909571450499054548, guid: d2abb3f7c9ac59048a122c38a8480e71, type: 3}
       propertyPath: m_LocalPosition.x
       value: -21.24
