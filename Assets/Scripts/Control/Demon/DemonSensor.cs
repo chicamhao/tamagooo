@@ -1,60 +1,57 @@
 ﻿using UnityEngine;
-using System.Collections;
-using Input;
 
 namespace Demon
 {
     public class DemonSensor : MonoBehaviour
     {
         [SerializeField] Transform _eyesLocation;
-
-        public SensorContext Context = new();
+        public CharacterController _player;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.TryGetComponent<ActionControl>(out var control))
+            if (other.gameObject.TryGetComponent<CharacterController>(out var controller))
             {
-                Context.Player = other.gameObject;
+                _player = controller;
             }
         }
 
         private void OnTriggerStay(Collider other)
         {
-            if (Context.Player != null)
+            if (_player != null)
             {
-                var playerPosition = Context.Player.transform.position + new Vector3(0f, 1.5f, 0f);
+                var playerPosition = _player.transform.position + new Vector3(0f, _player.height * 0.8f, 0f);
                 var distance = Vector3.Distance(playerPosition, _eyesLocation.position);
 
-                Debug.DrawRay(_eyesLocation.position,
-                    (playerPosition - _eyesLocation.position).normalized * distance, Color.yellow);
+                var fromPosition = _eyesLocation.position;
+                var toPosition = (playerPosition - _eyesLocation.position).normalized * distance;
+                Debug.DrawRay(fromPosition, toPosition, Color.yellow);
 
-                var hits = Physics.RaycastAll(_eyesLocation.position, (playerPosition - _eyesLocation.position).normalized, distance);
-
-                foreach (var hit in hits) 
+                if (!TryDetectObstacles(playerPosition, distance))
                 {
-                    if (!hit.transform.CompareTag("Player") && hit.collider != null && !hit.collider.isTrigger)
-                        break;
-                    
-                    Debug.DrawRay(_eyesLocation.position,
-                        (playerPosition - _eyesLocation.position).normalized * distance, Color.red);
-                    Debug.Log("Demon sees you!");                                       
+                    Debug.DrawRay(fromPosition, toPosition, Color.red);
+                    Debug.Log("Demon sees you!");
                 }
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.TryGetComponent<ActionControl>(out var control))
+            if (other.gameObject.TryGetComponent<CharacterController>(out var _))
             {
-                Context.Player = null;
+                _player = null;
             }
         }
 
-        virtual public void Interact() { }
-    }
+        private bool TryDetectObstacles(Vector3 playerPosition, float distance)
+        {
+            var hits = Physics.RaycastAll(_eyesLocation.position, (playerPosition - _eyesLocation.position).normalized, distance);
+            foreach (var hit in hits)
+            {
+                if (!hit.transform.CompareTag("Player") && hit.collider != null && !hit.collider.isTrigger)
+                    return true;
 
-    public class SensorContext
-    {
-        public GameObject Player;
+            }
+            return false;
+        }
     }
 }
