@@ -10,12 +10,6 @@ namespace Action
         static readonly float _groundDistanceInAir = 0.07f; 
         static readonly float _jumpGroundingPreventionTime = 0.2f;
 
-        // height of character when standing.
-        public static float CapsuleHeightStanding = 1.8f;
-
-        // height of character when crouching.
-        public static float CapsuleHeightCrouching = 0.9f;
-
         public bool IsGrounded { get; set; }
         public bool IsCrouching { get; set; }
         public float LastTimeJumped { get; set; }
@@ -30,8 +24,11 @@ namespace Action
         public InputHandle Input => _input;
         private readonly InputHandle _input;
 
-        public ActionContext(CharacterController controller, InputHandle input)
+        public ActionSettings _settings;
+
+        public ActionContext(ActionSettings settings, CharacterController controller, InputHandle input)
         {
+            _settings = settings;
             _controller = controller;
             _input = input;
         }        
