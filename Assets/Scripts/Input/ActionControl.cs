@@ -19,7 +19,7 @@ namespace Input
 
         private void Start()
         {
-            _context = new ActionContext(GetComponent<CharacterController>(), GetComponent<InputHandle>());
+            _context = new ActionContext(_settings, GetComponent<CharacterController>(), GetComponent<InputHandle>());
             _crouchAction = new CrouchAction(_context, _settings.Crouch);
 
             _jumpAction = new JumpAction(_context, _settings.Jump);

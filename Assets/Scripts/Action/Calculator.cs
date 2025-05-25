@@ -45,7 +45,7 @@ namespace Action
 
             foreach (Collider c in _colliders)
             {
-                if (c != null && c != context.Controller)
+                if (c != null && c != context.Controller && !c.isTrigger)
                 {
                     return false;
                 }
