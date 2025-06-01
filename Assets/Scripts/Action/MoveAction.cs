@@ -75,8 +75,7 @@ namespace Action
             // converts move input to a world space vector based on our character's transform orientation
             var worldSpaceMoveInput = _context.Controller.transform.TransformVector(_context.Input.GetMoveInput());
             
-            // calculate the desired velocity from inputs, max speed, and current slope
-            
+            // calculate the desired velocity from inputs, max speed, and current slope 
             var targetVelocity = worldSpaceMoveInput * (_moveSettings.MaxSpeedOnGround * speedModifier);
                 
             // reduce speed if crouching by crouch speed ratio
