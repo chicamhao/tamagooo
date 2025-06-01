@@ -1,6 +1,5 @@
 ﻿using Input;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Demon
 {
@@ -96,6 +95,7 @@ namespace Demon
                 State.Insight => Color.red,
                 State.InsightCrounch => Color.orange,
                 State.InsightObstacle => Color.yellow,
+                _ => Color.black
             };
 
             CalculatePosition();
