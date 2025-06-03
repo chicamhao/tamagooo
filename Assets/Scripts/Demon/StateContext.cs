@@ -1,12 +1,16 @@
-namespace Control.Monsters
+namespace Demon
 {
     public sealed class StateContext
     {
         private IState _currentState;
 
-        public void Start(IState state)
+        public PatrolPath PatrolPath => _patrolPath;
+        PatrolPath _patrolPath;
+
+        public void Start(IState state, PatrolPath patrolPath)
         {
             _currentState = state;
+            _patrolPath = patrolPath;
         }
 
         public void ChangeState(IState newState)
