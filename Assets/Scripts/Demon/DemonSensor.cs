@@ -11,6 +11,7 @@ namespace Demon
             Insight,
             InsightCrounch,
             InsightObstacle,
+            InsightThenObstacle
         }
 
         [SerializeField] Transform _eyesLocation;
@@ -42,16 +43,21 @@ namespace Demon
         {
             if (_player != null)
             {
+                bool obstaclesFlag = TryDetectObstacles();
                 if (_state == State.InsightCrounch)
                 {
-                    if (!other.gameObject.GetComponent<ActionControl>().Context.IsCrouching)
+                    if (!obstaclesFlag && !other.gameObject.GetComponent<ActionControl>().Context.IsCrouching)
                     {
                         _state = State.Insight;
                     }
                 }
-                else if (_state == State.InsightObstacle && !TryDetectObstacles())
+                else if (!obstaclesFlag && _state == State.InsightObstacle)
                 {
                     _state = State.Insight;
+                }
+                else if (_state == State.Insight && obstaclesFlag)
+                {
+                    _state = State.InsightThenObstacle;
                 }
             }
         }
@@ -71,7 +77,10 @@ namespace Demon
             var hits = Physics.RaycastAll(_eyesLocation.position, (_playerPosition - _eyesLocation.position).normalized, _distance);
             foreach (var hit in hits)
             {
-                if (!hit.transform.CompareTag("Player") && hit.collider != null && !hit.collider.isTrigger)
+                if (hit.collider != null && hit.collider.isTrigger)
+                    continue;
+
+                if (!hit.transform.CompareTag("Player"))
                     return true;
 
             }
@@ -95,6 +104,7 @@ namespace Demon
                 State.Insight => Color.red,
                 State.InsightCrounch => Color.orange,
                 State.InsightObstacle => Color.yellow,
+                State.InsightThenObstacle => Color.orangeRed,
                 _ => Color.black
             };
 

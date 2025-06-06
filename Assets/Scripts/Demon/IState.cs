@@ -1,4 +1,4 @@
-namespace Control.Monsters
+namespace Demon
 {
     public interface IState
     {
