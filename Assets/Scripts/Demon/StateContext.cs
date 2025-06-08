@@ -12,7 +12,6 @@ namespace Demon
         [SerializeField] DemonSettings _settings;
 
         [SerializeField] Animator _animator;
-        [SerializeField] Animation _animation;
         [SerializeField] NavMeshAgent _agent;
 
         public Vector3 PlayerPosition => _playerPosition;
@@ -27,7 +26,6 @@ namespace Demon
         {
             _animator = GetComponent<Animator>();
             _agent = GetComponent<NavMeshAgent>();
-            _animation = GetComponent<Animation>();
             _patrolPath = FindFirstObjectByType<PatrolPath>();
             _playerPosition = FindFirstObjectByType<CharacterController>().transform.position;
 
@@ -55,14 +53,6 @@ namespace Demon
             // transform velocity direction from global space to local space
             var velocity = transform.InverseTransformDirection(_agent.velocity);
 
-            if (velocity.z > 0)
-            {
-                _animation.Play();
-            }
-            else
-            {
-                _animation.Stop();
-            }
             // forward direction
             _animator.SetFloat(s_forwardSpeedAnimation, Mathf.Abs(velocity.z));
         }
