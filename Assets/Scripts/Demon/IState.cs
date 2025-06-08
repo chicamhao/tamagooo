@@ -2,7 +2,7 @@ namespace Demon
 {
     public interface IState
     {
-        void Enter(StateContext context);
+        void Enter(StateControl control);
         void Update();
         void Exit();
     }

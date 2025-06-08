@@ -1,61 +1,92 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Demon
 {
     public sealed class PatrolPath : MonoBehaviour
     {
-        private List<WayPoint> _points = new();
-        public IReadOnlyList<WayPoint> Point => _points;
+        private DemonSettings _settings;
+        private WayPoint _currentPoint;
+
+        private readonly List<WayPoint> _points = new();
+        public IReadOnlyList<WayPoint> Points => _points;
+
+        private readonly Dictionary<WayPoint, float> _visitedTimes = new();
 
         public float _wayPointDistance = 5f;
 
-        private void OnDrawGizmos()
+        public void Initialize(DemonSettings settings)
         {
+            _settings = settings;
             for (var i = 0; i < transform.childCount; i++)
             {
                 var position = transform.GetChild(i).position;
-                Gizmos.DrawSphere(position, .2f);
-
-                var nearlyPoints = GetNextWayPoints(i);
-                _points.Add(new WayPoint(position, nearlyPoints.ToArray()));
-
-                foreach (var p in GetNextWayPoints(i))
-                {
-                    Gizmos.DrawLine(position, p);
-                }
+                _points.Add(new WayPoint(position));
             }
         }
 
-        private List<Vector3> GetNextWayPoints(int index)
+        public void Spawn(Vector3 spawnPoint)
         {
-            var from = transform.GetChild(index).position;
-            var points = new List<Vector3>();
-            for (var i = 0; i < transform.childCount; i++)
+            _currentPoint = _points.Find(x => x.Point == spawnPoint);
+            _visitedTimes[_currentPoint] = Time.time;
+        }
+
+        public WayPoint Next()
+        {
+            _visitedTimes[_currentPoint] = Time.time;
+            var from = _currentPoint.Point;
+            foreach (var point in _points.OrderBy(x => Vector3.Distance(x.Point, from)))
             {
-                if (i == index) continue;
+                if (IsRecentlyVisited(point))
+                    continue;
 
-                var to = transform.GetChild(i).position;
-                var distance = Vector3.Distance(from, to);
+                _currentPoint = point;
+                return point;
+            }
 
-                if (distance < _wayPointDistance)
+            return _currentPoint;
+        }
+
+        bool IsRecentlyVisited(WayPoint point)
+        {
+            if (_visitedTimes.TryGetValue(point, out float lastTime))
+                return (Time.time - lastTime) < _settings.Wander.VisitedDuration;
+            return false;
+        }
+
+
+        private void OnDrawGizmos()
+        {
+            if (_points.Count == 0)
+            {
+                for (var i = 0; i < transform.childCount; i++)
                 {
-                    points.Add(transform.GetChild(i).position);
+                    var position = transform.GetChild(i).position;
+                    _points.Add(new WayPoint(position));
                 }
             }
-            return points;
+
+            foreach (var x in _points)
+            {
+                var color = Color.green;
+                if (IsRecentlyVisited(x))
+                {
+                    color = Color.red;
+                }
+                Gizmos.color = color;
+                Gizmos.DrawSphere(x.Point, .2f);
+            }
         }
     }
 
     public readonly struct WayPoint
     {
         public readonly Vector3 Point;
-        public readonly Vector3[] NearbyPoints;
 
-        public WayPoint(Vector3 point, Vector3[] nearbyPoint)
+        public WayPoint(Vector3 point)
         {
             Point = point;
-            NearbyPoints = nearbyPoint;
         }
     }
 }
