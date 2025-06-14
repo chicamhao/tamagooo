@@ -1,3 +1,4 @@
+using Helper;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,40 +7,88 @@ namespace Demon
     public class WanderState : IState
     {
         private StateControl _control;
+        private PatrolPath _path => _control.PatrolPath;
+
         private NavMeshAgent _agent;
 
         private Vector3 _destination;
         public Vector3 Destionation => _destination;
 
+        private float _idleTime;
+        private float _idleTimeDuration;
+
+        private float _waitTime;
+
+        private WanderSettings _settings;
+
+        Vector3 _currentPoint;
+
         public void Enter(StateControl control)
         {
             _control = control;
             _agent = control.GetComponent<NavMeshAgent>();
-            _agent.speed = control.Settings.Wander.Speed;
-            SetNextDestination();
+            _settings = control.Settings.Wander;
+            ToUnvisited();
         }
 
         public void Update()
-        {
-            //if (Vector3.Distance(ai.transform.position, ai.player.position) < ai.config.chaseDistance ||
-            //    ai.GetLightIntensity() > ai.config.lightAggroThreshold)
-            //{
-            //    ai.ChangeState(new ChaseState());
-            //    return;
-            //}
+        { 
+            _agent.speed = _settings.Speed;
 
-            if (!_agent.pathPending && _agent.remainingDistance < 0.5f)
+            _waitTime += Time.deltaTime;
+            if (_waitTime >= _settings.WaitTime)
             {
-                SetNextDestination();
+                _agent.isStopped = true;
+                _control.ChangeState(new DespawnState());
+            }
+
+            if (_idleTimeDuration != 0)
+            {
+                _idleTime += Time.deltaTime;
+                if (_idleTime > _idleTimeDuration)
+                {
+                    _idleTime = _idleTimeDuration = 0;
+
+                    ToUnvisited();
+                }
+                else
+                {
+                    return; // keep idle state
+                }
+            }
+
+            if (IsAtNextPoint())
+            {
+                _path.CurrentPoint = _path.NextPoint;
+
+                // to idle.
+                if (_path.IsCurrentPointSingle())
+                {
+                    _idleTime = 0;
+                    _idleTimeDuration = Random.Range(_settings.IdleDurationMin, _settings.IdleDurationMax);
+                }
+                else
+                {
+                    ToUnvisited();
+                }
             }
         }
 
-        public void Exit() { }
-
-        void SetNextDestination()
+        private bool IsAtNextPoint()
         {
-            var next = _control.PatrolPath.Next();
-            _agent.SetDestination(next.Point);
+            return !_agent.pathPending && _agent.remainingDistance < 0.5f;
+        }
+
+        private void ToUnvisited()
+        {
+            var next = _control.PatrolPath.GetUnvisitedPoint();
+            _control.PatrolPath.NextPoint = next;
+            _agent.SetDestination(next.position);
+        }
+
+        public void Exit()
+        {
+            _waitTime = _idleTime = _idleTimeDuration = 0;
         }
     }
 }

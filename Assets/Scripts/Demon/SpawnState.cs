@@ -6,14 +6,16 @@ namespace Demon
     public sealed class SpawnState : IState
     {
         StateControl _context;
+        SpawnSettings _settings;
         float _waitTime;
 
         public void Enter(StateControl control)
         {
             _context = control;
+            _settings = _context.Settings.Spawn;
 
             var spawnPoint = GetSpawnPoint();
-            control.transform.SetPositionAndRotation(spawnPoint, Quaternion.identity);
+            control.transform.SetPositionAndRotation(spawnPoint.position, Quaternion.identity);
 
             _context.PatrolPath.Spawn(spawnPoint);
             _waitTime = 0;
@@ -21,10 +23,8 @@ namespace Demon
 
         public void Update()
         {
-            if (_context == null) return;
-
             _waitTime += Time.deltaTime;
-            if (_waitTime > _context.Settings.Spawn.WaitTime)
+            if (_waitTime > _settings.WaitTime)
             {
                 _context.ChangeState(new WanderState());
             }
@@ -32,18 +32,18 @@ namespace Demon
 
         public void Exit()
         {
-            _context = null;
+            _waitTime = 0;
         }
 
-        private Vector3 GetSpawnPoint()
+        private Transform GetSpawnPoint()
         {
-            var pool = new List<Vector3>();
+            var pool = new List<Transform>();
 
             foreach (var x in _context.PatrolPath.Points)
             {
-                if (Vector3.Distance(x.Point, _context.PlayerPosition) > _context.Settings.Spawn.DistanceToPlayer)
+                if (Vector3.Distance(x.position, _context.PlayerPosition) > _settings.DistanceToPlayer)
                 {
-                    pool.Add(x.Point);
+                    pool.Add(x);
                 }
             }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Helper;
 using UnityEngine;
 
 namespace Demon
@@ -7,87 +8,135 @@ namespace Demon
     public sealed class PatrolPath : MonoBehaviour
     {
         private DemonSettings _settings;
-        private WayPoint _currentPoint;
 
-        private readonly List<WayPoint> _points = new();
-        public IReadOnlyList<WayPoint> Points => _points;
+        private Transform _currentPoint;
+        public Transform CurrentPoint
+        {
+            get { return _currentPoint; }
+            set { _currentPoint = value; }
+        }
 
-        private readonly Dictionary<WayPoint, float> _visitedTimes = new();
+        private Transform _nextPoint;
+        public Transform NextPoint
+        {
+            get { return _nextPoint; }
+            set
+            {
+                _visitedTimes[value] = Time.time;
+                _nextPoint = value;
+            }
+        }
 
-        public float _wayPointDistance = 5f;
+
+        private readonly List<Transform> _points = new();
+        public IReadOnlyList<Transform> Points => _points;
+
+        public readonly Dictionary<Transform, int> _connectedCounters = new();
+        private readonly Dictionary<Transform, float> _visitedTimes = new();
+
+        public float _pointDistance = 10f;
 
         public void Initialize(DemonSettings settings)
         {
             _settings = settings;
             for (var i = 0; i < transform.childCount; i++)
             {
-                var position = transform.GetChild(i).position;
-                _points.Add(new WayPoint(position));
+                var point = transform.GetChild(i);
+                _points.Add(point);
+                _connectedCounters[point] = GetNextPoints(point).Count;
             }
         }
 
-        public void Spawn(Vector3 spawnPoint)
+        public void Spawn(Transform spawnPoint)
         {
-            _currentPoint = _points.Find(x => x.Point == spawnPoint);
+            _visitedTimes.Clear();
+
+            _currentPoint = spawnPoint;
             _visitedTimes[_currentPoint] = Time.time;
         }
 
-        public WayPoint Next()
+        public bool IsCurrentPointSingle()
         {
-            _visitedTimes[_currentPoint] = Time.time;
-            var from = _currentPoint.Point;
-            foreach (var point in _points.OrderBy(x => Vector3.Distance(x.Point, from)))
-            {
-                if (IsRecentlyVisited(point))
-                    continue;
+            if (_connectedCounters.TryGetValue(_currentPoint, out int count))
+            { 
+                return count == 1;
+            }
+            return false;
+        }
 
-                _currentPoint = point;
+        public Transform GetUnvisitedPoint()
+        {
+            var from = _currentPoint;
+            foreach (var point in _points.OrderBy(x => Calculator.GetNavMeshDistance(x.position, from.position)))
+            {
+                if (IsRecentlyVisited(point)) continue;
+
                 return point;
             }
+
+            Debug.Log("all visited, reset visiting cache.");
+            _visitedTimes.Clear();
 
             return _currentPoint;
         }
 
-        bool IsRecentlyVisited(WayPoint point)
+        bool IsRecentlyVisited(Transform point)
         {
             if (_visitedTimes.TryGetValue(point, out float lastTime))
-                return (Time.time - lastTime) < _settings.Wander.VisitedDuration;
+                return Time.time - lastTime < _settings.Wander.VisitedDuration;
             return false;
         }
 
 
+        private List<Transform> GetNextPoints(Transform from)
+        {
+            var points = new List<Transform>();
+            for (var i = 0; i < transform.childCount; i++)
+            {
+
+                var to = transform.GetChild(i);
+                var distance = Vector3.Distance(from.position, to.position);
+
+                if (from != to && distance < _pointDistance)
+                {
+                    points.Add(transform.GetChild(i));
+                }
+            }
+            return points;
+        }
+
         private void OnDrawGizmos()
         {
-            if (_points.Count == 0)
+            _points.Clear();
+            for (var i = 0; i < transform.childCount; i++)
             {
-                for (var i = 0; i < transform.childCount; i++)
-                {
-                    var position = transform.GetChild(i).position;
-                    _points.Add(new WayPoint(position));
-                }
+                var position = transform.GetChild(i);
+                _points.Add(position);
             }
 
             foreach (var x in _points)
             {
                 var color = Color.green;
-                if (IsRecentlyVisited(x))
+
+                if (x == _nextPoint)
+                {
+                    color = Color.yellow;
+                }
+                else if (IsRecentlyVisited(x))
                 {
                     color = Color.red;
                 }
+
                 Gizmos.color = color;
-                Gizmos.DrawSphere(x.Point, .2f);
+                Gizmos.DrawSphere(x.position, .2f);
+
+                foreach (var p in GetNextPoints(x))
+                {
+                    Gizmos.color = Color.white;
+                    Gizmos.DrawLine(x.position, p.position);
+                }
             }
         }
-    }
-
-    public readonly struct WayPoint
-    {
-        public readonly Vector3 Point;
-
-        public WayPoint(Vector3 point)
-        {
-            Point = point;
-        }
-    }
+    }  
 }
 
