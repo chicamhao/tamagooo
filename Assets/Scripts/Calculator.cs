@@ -1,6 +1,8 @@
+using Action;
 using UnityEngine;
+using UnityEngine.AI;
 
-namespace Action
+namespace Helper
 {
     public static class Calculator
     {
@@ -52,6 +54,32 @@ namespace Action
             }
 
             return true;
+        }
+
+        public static float GetNavMeshDistance(Vector3 start, Vector3 end)
+        {
+            NavMeshPath path = new();
+            if (NavMesh.CalculatePath(start, end, NavMesh.AllAreas, path))
+            {
+                float totalDistance = 0f;
+                for (int i = 1; i < path.corners.Length; i++)
+                {
+                    totalDistance += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+                }
+                return totalDistance;
+            }
+            return -1f; // path not found
+        }
+
+        public static Vector3 GetRandomNavMeshPosition(Vector3 center, float radius)
+        {
+            Vector3 randomPos = center + Random.insideUnitSphere * radius;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPos, out hit, radius, NavMesh.AllAreas))
+            {
+                return hit.position;
+            }
+            return center;
         }
     }
 }
