@@ -12,6 +12,8 @@ namespace Demon
         [SerializeField] DemonSettings _settings;
 
         [SerializeField] Animator _animator;
+
+        public NavMeshAgent Agent => _agent;
         [SerializeField] NavMeshAgent _agent;
 
         public Vector3 PlayerPosition => _playerPosition;

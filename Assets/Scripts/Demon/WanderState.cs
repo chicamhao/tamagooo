@@ -1,4 +1,3 @@
-using Helper;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,7 +8,7 @@ namespace Demon
         private StateControl _control;
         private PatrolPath _path => _control.PatrolPath;
 
-        private NavMeshAgent _agent;
+        private NavMeshAgent _agent => _control.Agent;
 
         private Vector3 _destination;
         public Vector3 Destionation => _destination;
@@ -26,7 +25,6 @@ namespace Demon
         public void Enter(StateControl control)
         {
             _control = control;
-            _agent = control.GetComponent<NavMeshAgent>();
             _settings = control.Settings.Wander;
             ToUnvisited();
         }
@@ -89,6 +87,8 @@ namespace Demon
         public void Exit()
         {
             _waitTime = _idleTime = _idleTimeDuration = 0;
+            _agent.ResetPath();
+            _agent.isStopped = true;
         }
     }
 }

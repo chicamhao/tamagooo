@@ -2249,7 +2249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &832922701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3377,7 +3377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1224400788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5956,26 +5956,10 @@ PrefabInstance:
     - target: {fileID: 2460375980332178078, guid: 2366b768e5dc34483a060c91c86ce17d, type: 3}
       propertyPath: _patrolPath
       value: 
-      objectReference: {fileID: 1224400788}
+      objectReference: {fileID: 832922701}
     - target: {fileID: 5661622213580163468, guid: 2366b768e5dc34483a060c91c86ce17d, type: 3}
       propertyPath: m_Name
       value: Demon
-      objectReference: {fileID: 0}
-    - target: {fileID: 6571658719836363409, guid: 2366b768e5dc34483a060c91c86ce17d, type: 3}
-      propertyPath: m_Speed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6571658719836363409, guid: 2366b768e5dc34483a060c91c86ce17d, type: 3}
-      propertyPath: m_AgentTypeID
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6571658719836363409, guid: 2366b768e5dc34483a060c91c86ce17d, type: 3}
-      propertyPath: m_Acceleration
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6571658719836363409, guid: 2366b768e5dc34483a060c91c86ce17d, type: 3}
-      propertyPath: m_AngularSpeed
-      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 8758822831054604682, guid: 2366b768e5dc34483a060c91c86ce17d, type: 3}
       propertyPath: m_LocalPosition.x
