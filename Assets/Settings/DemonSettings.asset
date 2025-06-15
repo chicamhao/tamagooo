@@ -15,14 +15,12 @@ MonoBehaviour:
   Spawn:
     DistanceToPlayer: 10
     WaitTime: 5
+  Despawn:
+    DisappearDuration: 1
+    WaitTime: 10
   Wander:
     Speed: 2
     VisitedDuration: 60
-    ToClosestWeight: 0.1
-    ToUnvisitedWeight: 0.9
-    IdleWeight: 0.2
     IdleDurationMin: 2
     IdleDurationMax: 5
-    RandomWeight: 0.5
-    RandomDurationMin: 3
-    RandomDurationMax: 10
+    WaitTime: 60

@@ -15,6 +15,7 @@ namespace Demon
             _settings = _context.Settings.Spawn;
 
             var spawnPoint = GetSpawnPoint();
+            control.Agent.Warp(spawnPoint.position);
             control.transform.SetPositionAndRotation(spawnPoint.position, Quaternion.identity);
 
             _context.PatrolPath.Spawn(spawnPoint);
